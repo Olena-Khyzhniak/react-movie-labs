@@ -44,7 +44,7 @@ export default function FilterMoviesCard(props) {
     props.onUserInput(type, value)   // NEW
   }
 
-  
+
   const handleTextChange = e => {
     handleChange(e, "name", e.target.value)
   }
@@ -74,7 +74,7 @@ export default function FilterMoviesCard(props) {
       onChange={handleTextChange}
     />
 
-        <FormControl sx={{...formControl}}>
+        <FormControl sx={{...formControl}} >
           <InputLabel id="genre-label"> Genre </InputLabel>
            <Select
     labelId="genre-label"
