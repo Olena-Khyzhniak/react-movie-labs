@@ -1,4 +1,4 @@
-//import React from "react";
+import React from "react";
 import MovieHeader from "../components/headerMovie/";
 import MovieDetails from "../components/movieDetails/";
 import Grid from "@mui/material/Grid";
