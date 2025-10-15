@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { getUpcomingMovies } from "../api/tmdb-api";
+
 
 export const MoviesContext = React.createContext(null);
 
@@ -26,6 +28,17 @@ const MoviesContextProvider = (props) => {
   };
 
 
+  const [upcomingMovieIds, setUpcomingMovieIds] = useState([]);
+
+useEffect(() => {
+  getUpcomingMovies().then((data) => {
+    const ids = data.results.map((movie) => movie.id);
+    setUpcomingMovieIds(ids);
+  });
+}, []);
+
+
+
     const addReview = (movie, review) => {
     setMyReviews( {...myReviews, [movie.id]: review } )
   };
@@ -39,6 +52,7 @@ const MoviesContextProvider = (props) => {
         addToFavorites,
         removeFromFavorites,
         addReview,
+        upcomingMovieIds,
       }}
     >
       {props.children}
