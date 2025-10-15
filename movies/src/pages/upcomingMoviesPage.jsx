@@ -1,34 +1,26 @@
-import React, { useContext } from "react";
+import React from "react";
+import { useQuery } from "@tanstack/react-query";
 import MovieListPageTemplate from "../components/templateMovieListPage";
-import { MoviesContext } from "../contexts/moviesContext";
-import { useQueries } from "@tanstack/react-query";
-import { getMovie } from "../api/tmdb-api";
 import Spinner from "../components/spinner";
+import { getUpcomingMovies } from "../api/tmdb-api";
 
 const UpcomingMoviesPage = () => {
-  const { upcomingMovieIds } = useContext(MoviesContext);
-
-  const upcomingMovieQueries = useQueries({
-    queries: upcomingMovieIds.map((id) => {
-      return {
-        queryKey: ["movie", { id }],
-        queryFn: () => getMovie(id),
-      };
-    }),
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ["upcoming"],
+    queryFn: getUpcomingMovies,
   });
 
-  const isLoading = upcomingMovieQueries.some((query) => query.isLoading);
-  const isError = upcomingMovieQueries.some((query) => query.isError);
-  const movies = upcomingMovieQueries.map((query) => query.data).filter(Boolean);
-
   if (isLoading) return <Spinner />;
-  if (isError) return <p>Error loading upcoming movies.</p>;
+  if (isError) {
+    console.error("Error fetching upcoming movies:", error.message);
+    return <p>Error loading upcoming movies.</p>;
+  }
 
   return (
     <MovieListPageTemplate
       title="Upcoming Movies"
-      movies={movies}
-      action={(movie) => null} // или твоя кнопка
+      movies={data.results}
+      action={(movie) => null}
     />
   );
 };
